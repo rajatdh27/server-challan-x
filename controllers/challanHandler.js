@@ -8,7 +8,7 @@ exports.postAddChallan = (req, res, next) => {
   const vechileNum = req.body.vehicleNum;
   const description = req.body.desc;
 
-  User.findOne({ empID: req.body.employee })
+  User.findOne({ empID: req.body.id })
     .then((user) => {
       req.user = user;
       req.auth = true;
