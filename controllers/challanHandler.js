@@ -1,9 +1,10 @@
 const Challan = require("../models/challan");
 const User = require("../models/user");
 const fs = require("fs");
+const PDFDoc = require("pdfkit");
 
 exports.postAddChallan = (req, res, next) => {
-  console.log(req.body);
+  console.log(req.file);
   const location = req.body.location;
   const vechileNum = req.body.vehicleNum;
   const description = req.body.desc;
@@ -18,11 +19,11 @@ exports.postAddChallan = (req, res, next) => {
         location: location,
         vechileNum: vechileNum,
         description: description,
-        img: {
-          data: fs.readFileSync("uploads/" + req.file.filename),
-          contentType: "image/jpeg",
-        },
         empID: user,
+        img: {
+          data: req.file.buffer,
+          contentType: req.file.mimetype,
+        },
       });
       console.log("challan44");
       console.log(user);
@@ -30,10 +31,19 @@ exports.postAddChallan = (req, res, next) => {
         .save()
         .then((result) => {
           console.log("Created challan");
+          const pdfOne = new PDFDoc();
           user.addTochallanArray(challan);
           console.log(result);
-          res.setHeader("Content-Type", "text/html");
-          res.send(result);
+          res.setHeader("Content-Type", "application/pdf");
+          res.setHeader(
+            "Content-Disposition",
+            "attachment; filename=helloworld.pdf"
+          );
+          pdfOne.pipe(fs.createWriteStream("example.pdf"));
+          pdfOne.pipe(res);
+          pdfOne.text("Hello");
+          pdfOne.end();
+          // res.send(result);
         })
         .catch((err) => {
           console.log(err);
