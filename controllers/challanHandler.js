@@ -32,11 +32,6 @@ exports.postAddChallan = (req, res, next) => {
         .then((result) => {
           console.log("Created challan");
           user.addTochallanArray(challan);
-          // console.log(result);
-          // res.setHeader("Content-Type", "text/html");
-          // const base64String = btoa(
-          //   String.fromCharCode(...new Uint8Array(challan.img.data.data))
-          // );
           const imga = `data:image/png;base64,${req.file.buffer.toString(
             "base64"
           )}`;
@@ -45,9 +40,9 @@ exports.postAddChallan = (req, res, next) => {
           res.setHeader("Content-Type", "application/pdf");
           res.setHeader(
             "Content-Disposition",
-            "attachment; filename=helloworld.pdf"
+            "attachment; filename=challan__.pdf"
           );
-          pdfOne.pipe(fs.createWriteStream(`challan__.pdf`));
+          // pdfOne.pipe(fs.createWriteStream(`challan__.pdf`));
           pdfOne.pipe(res);
           pdfOne.text(`Challan Created!`);
           pdfOne.image(imga, {

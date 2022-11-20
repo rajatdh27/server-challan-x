@@ -20,11 +20,33 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
 app.use(challanRoute);
 
+
+// app.get("/45", (req, res) => {
+//   console.log("HP");
+//   const pdfOne = new PDFDoc();
+//   res.setHeader("Content-Type", "application/pdf");
+//   res.setHeader("Content-Disposition", "attachment; filename=helloworld.pdf");
+//   pdfOne.pipe(fs.createWriteStream("example.pdf"));
+//   pdfOne.pipe(res);
+//   pdfOne.text("Hello");
+//   pdfOne.end();
+// });
+
 app.use(userRoute);
 
 app.use(contactRoute);
 
 app.use(authenticationRoute);
+// app.get("/find", (req, res) => {
+//   Challan.findOne({ location: "USA44" }, (err, docs) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       console.log(docs);
+//       res.send(docs.img);
+//     }
+//   });
+// });
 
 mongoose
   .connect(process.env.MONGO_CONNECTION_KEY)
