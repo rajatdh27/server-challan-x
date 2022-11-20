@@ -20,6 +20,10 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
 app.use(challanRoute);
 
+app.get("/46", (req, res) => {
+  res.send("DHIRAJ LODI");
+});
+
 app.get("/45", (req, res) => {
   console.log("HP");
   const pdfOne = new PDFDoc();
