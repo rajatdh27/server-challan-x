@@ -19,4 +19,7 @@ router.post(
 );
 
 router.post("/all-challan", challanController.getAllChallan);
+
+router.get("/get-pdf", challanController.getPdf);
+
 module.exports = router;

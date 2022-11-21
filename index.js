@@ -20,17 +20,17 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
 app.use(challanRoute);
 
-
-// app.get("/45", (req, res) => {
-//   console.log("HP");
-//   const pdfOne = new PDFDoc();
-//   res.setHeader("Content-Type", "application/pdf");
-//   res.setHeader("Content-Disposition", "attachment; filename=helloworld.pdf");
-//   pdfOne.pipe(fs.createWriteStream("example.pdf"));
-//   pdfOne.pipe(res);
-//   pdfOne.text("Hello");
-//   pdfOne.end();
-// });
+app.post("/45", (req, res, next) => {
+  console.log("HP");
+  const pdfOne = new PDFDoc();
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", "attachment; filename=helloworld.pdf");
+  pdfOne.pipe(fs.createWriteStream("example.pdf"));
+  pdfOne.pipe(res);
+  pdfOne.text("Hello");
+  pdfOne.end();
+  next();
+});
 
 app.use(userRoute);
 

@@ -3,11 +3,17 @@ const User = require("../models/user");
 const fs = require("fs");
 const PDFDoc = require("pdfkit");
 
+let location;
+let vechileNum;
+let description;
+let file;
+
 exports.postAddChallan = (req, res, next) => {
   console.log(req.file);
-  const location = req.body.location;
-  const vechileNum = req.body.vehicleNum;
-  const description = req.body.desc;
+  location = req.body.location;
+  vechileNum = req.body.vehicleNum;
+  description = req.body.desc;
+  file = req.file;
 
   User.findOne({ empID: req.body.id })
     .then((user) => {
@@ -32,27 +38,8 @@ exports.postAddChallan = (req, res, next) => {
         .then((result) => {
           console.log("Created challan");
           user.addTochallanArray(challan);
-          const imga = `data:image/png;base64,${req.file.buffer.toString(
-            "base64"
-          )}`;
           console.log("HP");
-          const pdfOne = new PDFDoc();
-          res.setHeader("Content-Type", "application/pdf");
-          res.setHeader(
-            "Content-Disposition",
-            "attachment; filename=challan__.pdf"
-          );
-          // pdfOne.pipe(fs.createWriteStream(`challan__.pdf`));
-          pdfOne.pipe(res);
-          pdfOne.text(`Challan Created!`);
-          pdfOne.image(imga, {
-            fit: [250, 300],
-            align: "center",
-          });
-          pdfOne.text(`\nLocation: ${location}`);
-          pdfOne.text(`\nVehcile Num: ${vechileNum}`);
-          pdfOne.text(`\nDescription: ${description}`);
-          pdfOne.end();
+          res.sendStatus(200);
           console.log(45);
         })
         .catch((err) => {
@@ -61,6 +48,27 @@ exports.postAddChallan = (req, res, next) => {
         });
     })
     .catch((err) => console.log(err));
+};
+
+exports.getPdf = (req, res, next) => {
+  console.log("yuiyiuiy");
+  console.log(req.body);
+  const imga = `data:image/png;base64,${file.buffer.toString("base64")}`;
+  const pdfOne = new PDFDoc();
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", "attachment; filename=challan__.pdf");
+  pdfOne.pipe(fs.createWriteStream(`challan__.pdf`));
+  pdfOne.pipe(res);
+  pdfOne.text(`Challan Created!`);
+  pdfOne.image(imga, {
+    fit: [250, 300],
+    align: "center",
+  });
+  pdfOne.text(`\nLocation: ${location}`);
+  pdfOne.text(`\nVehcile Num: ${vechileNum}`);
+  pdfOne.text(`\nDescription: ${description}`);
+  pdfOne.end();
+  next();
 };
 
 exports.getAllChallan = (req, res) => {
